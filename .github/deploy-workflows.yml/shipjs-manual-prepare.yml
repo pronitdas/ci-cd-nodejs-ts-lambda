@@ -1,0 +1,42 @@
+name: Ship js Manual Prepare
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - stage
+jobs:
+  manual_prepare:
+    if: |
+     github.event.pull_request.merged == true && github.base_ref == 'stage' && github.head_ref =='test'   
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          registry-url: "https://registry.npmjs.org"
+          node-version: ${{ matrix.node }}
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: stage
+          
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: install
+        run: npm ci
+
+      - run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - run: npm run release -- --yes --no-browse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_INCOMING_HOOK: ${{ secrets.SLACK_INCOMING_HOOK }}

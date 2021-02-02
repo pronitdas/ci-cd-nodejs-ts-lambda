@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": false, // Enable strict features.. in progress
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "esnext", // Let babel targets the right version of node
+    "esModuleInterop": true
+  }
+}

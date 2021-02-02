@@ -1,0 +1,40 @@
+
+
+service: ci-cd-node-ts
+custom:
+  secrets: ${file(${opt:stage, 'local'}.json)}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: 'npm'
+  serverless-offline:
+    useChildProcesses: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'develop'}
+  region: ap-south-1
+  timeout: 10 # Default Lambda timeout.
+  memorySize: 512 # Default Lambda Memory Size.
+  environment:
+   ENV: ${self:custom.secrets.NODE_ENV}
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+package:
+  exclude:
+    - "output-files/**"
+    - "test-files/**"
+    - "node_modules/**"
+    - "env/**"
+    - '*/**'
+   
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: api/v1/hello
+          method: get
