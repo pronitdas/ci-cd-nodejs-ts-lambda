@@ -14,8 +14,7 @@ updates:
   reviewers:
     - pronitdas
   assignees:
-    - vinayakkulkarni
-    - ganesh-geospoc
+    - pronitdas
   commit-message:
     prefix: fix
     prefix-development: chore
@@ -28,9 +27,9 @@ updates:
     time: '00:00'
   open-pull-requests-limit: 10
   reviewers:
-    - vinayakkulkarni
+    - pronitdas
   assignees:
-    - vinayakkulkarni
+    - pronitdas
   commit-message:
     prefix: fix
     prefix-development: chore
